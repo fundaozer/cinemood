@@ -1,4 +1,4 @@
-# Virtual Environment
+# Virtual Environment (Python)
 venv/
 .venv/
 env/
@@ -17,8 +17,40 @@ backend/data/*.csv
 # Trained ML Models
 backend/app/models/*.pkl
 
+# Frontend Dependencies
+node_modules/
+/jspm_packages/
+
+# Frontend Build Outputs
+dist/
+tmp/
+out/
+build/
+
+# Vite Cache
+.vite/
+
+# Local Environment Variables & Secrets
+.env
+.env.local
+.env.development.local
+.env.test.local
+.env.production.local
+
+# Log Files
+*.log
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+pnpm-debug.log*
+
 # IDE and OS files
 .vscode/
 .idea/
 .DS_Store
 Thumbs.db
+*.suo
+*.ntvs*
+*.njsproj
+*.sln
+*.sw?
