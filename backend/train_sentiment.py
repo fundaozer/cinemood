@@ -8,6 +8,7 @@ from sklearn.linear_model import LogisticRegression
 from sklearn.metrics import classification_report, accuracy_score
 
 
+# Clean HTML tags, non-alphabetic chars, and extra whitespace from text
 def clean_text(text: str) -> str:
     text = str(text).lower()
     text = re.sub(r"<.*?>", " ", text)
@@ -16,16 +17,20 @@ def clean_text(text: str) -> str:
     return text
 
 
+# Load review data
 reviews = pd.read_csv("data/reviews.csv")
 
+# Clean missing and duplicate rows
 reviews = reviews.dropna(subset=["review", "sentiment"])
 reviews = reviews.drop_duplicates()
 
+# Apply cleaning function to reviews
 reviews["clean_review"] = reviews["review"].apply(clean_text)
 
 X = reviews["clean_review"]
 y = reviews["sentiment"]
 
+# Convert text into TF-IDF vector representations (using unigrams and bigrams)
 vectorizer = TfidfVectorizer(
     stop_words="english",
     max_features=10000,
@@ -34,6 +39,7 @@ vectorizer = TfidfVectorizer(
 
 X_vectorized = vectorizer.fit_transform(X)
 
+# Train-test split 
 X_train, X_test, y_train, y_test = train_test_split(
     X_vectorized,
     y,
@@ -42,14 +48,17 @@ X_train, X_test, y_train, y_test = train_test_split(
     stratify=y
 )
 
+# Train a Logistic Regression classifier
 model = LogisticRegression(max_iter=1000)
 model.fit(X_train, y_train)
 
+# Run prediction benchmarks
 predictions = model.predict(X_test)
 
 print("Accuracy:", accuracy_score(y_test, predictions))
 print(classification_report(y_test, predictions))
 
+# Save model and vectorizer checkpoints
 joblib.dump(model, "app/models/sentiment_model.pkl")
 joblib.dump(vectorizer, "app/models/sentiment_vectorizer.pkl")
 
