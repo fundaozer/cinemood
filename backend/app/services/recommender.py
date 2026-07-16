@@ -30,10 +30,19 @@ def format_movies(df):
     result = []
 
     for _, row in df.iterrows():
+        overview = str(row.get("overview", ""))
+        if len(overview) > 1000:
+            truncated = overview[:1000]
+            last_space = truncated.rfind(" ")
+            if last_space != -1:
+                overview = truncated[:last_space] + "..."
+            else:
+                overview = truncated + "..."
+
         result.append({
             "title": str(row.get("title", "")),
             "genres": str(row.get("genres", "")),
-            "overview": str(row.get("overview", ""))[:250],
+            "overview": overview,
             "vote_average": float(row.get("vote_average", 0)),
             "popularity": float(row.get("popularity", 0))
         })
