@@ -16,12 +16,13 @@ cinemood/
 │   │   ├── services/
 │   │   │   ├── recommender.py # Content & mood recommendation logic
 │   │   │   └── sentiment.py  # Review sentiment evaluation
-│   │   └── models/           # Trained pickle models & vectorizers
+│   │   └── models/           # Trained pickle models & vectorizers (included in repo)
 │   │
-│   ├── data/                 # Raw and cleaned CSV datasets
-│   ├── prepare_data.py       # Data cleaning & ETL script
-│   ├── train_sentiment.py    # Sentiment classifier training
-│   ├── train_recommender.py  # Recommendation system training
+│   ├── data/
+│   │   └── movies.csv        # Processed movie dataset (included in repo)
+│   ├── prepare_data.py       # Data cleaning & ETL script (optional, for retraining)
+│   ├── train_sentiment.py    # Sentiment classifier training (optional, for retraining)
+│   ├── train_recommender.py  # Recommendation system training (optional, for retraining)
 │   └── requirements.txt      # Python dependencies
 │
 ├── frontend/                 # React + Vite + TypeScript Frontend
@@ -35,8 +36,16 @@ cinemood/
 │   │   └── main.tsx          # React entry point
 │   └── package.json          # Node dependencies
 │
-└── .gitignore                # Git exclusions (datasets, virtualenv, and models)
+└── .gitignore                # Git exclusions (raw datasets, virtualenv)
 ```
+
+---
+
+## Dataset
+
+The raw datasets used in this project were originally sourced from [Kaggle (TMDB 5000 Movie Dataset)](https://www.kaggle.com/datasets/tmdb/tmdb-movie-metadata). The raw data files are **not** included in this repository due to their size.
+
+The **processed dataset** (`backend/data/movies.csv`) and **trained ML models** (`backend/app/models/*.pkl`) are included in the repo, so you can run the application directly without any extra setup.
 
 ---
 
@@ -59,7 +68,7 @@ cinemood/
 
 ## Installation & Running
 
-### 1. Backend Setup & Model Training
+### 1. Backend Setup
 Open a terminal in the `backend/` directory:
 
 ```bash
@@ -75,15 +84,12 @@ source venv/bin/activate
 # Install requirements
 pip install -r requirements.txt
 
-# Run data preparation and train ML models
-python prepare_data.py
-python train_sentiment.py
-python train_recommender.py
-
 # Start FastAPI dev server
 uvicorn app.main:app --reload
 ```
 The interactive Swagger API documentation will be available at: `http://127.0.0.1:8000/docs`
+
+> **Note**: The processed dataset and trained models are already included in the repository. No data preparation or model training steps are needed to run the application.
 
 ### 2. Frontend Setup
 Open a second terminal in the `frontend/` directory:
@@ -111,5 +117,3 @@ The React web application will be active at: `http://localhost:5173/`
 - `POST /recommend/mood` - Submits a mood value (e.g. happy) and min rating to query movie lists.
 
 ---
-
-

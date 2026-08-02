@@ -118,9 +118,12 @@ def get_dashboard_stats():
     avg_rating = float(movies["vote_average"].mean())
     avg_popularity = float(movies["popularity"].mean())
 
-    top_movies = movies.sort_values(
-        by="vote_average",
-        ascending=False
+    # Filter for well-known movies (popularity > 10) to ensure poster availability
+    popular_movies = movies[movies["popularity"] >= 10]
+
+    top_movies = popular_movies.sort_values(
+        by=["vote_average", "popularity"],
+        ascending=[False, False]
     ).head(10)
 
     return {

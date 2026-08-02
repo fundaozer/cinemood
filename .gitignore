@@ -11,11 +11,11 @@ __pycache__/
 *.pyd
 .pytest_cache/
 
-# Large Datasets (Do not push data to GitHub)
-backend/data/*.csv
+# Raw Kaggle Datasets (too large for GitHub)
+backend/data/movies_raw.csv
+backend/data/credits_raw.csv
+backend/data/reviews.csv
 
-# Trained ML Models
-backend/app/models/*.pkl
 
 # Frontend Dependencies
 node_modules/

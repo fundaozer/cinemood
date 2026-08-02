@@ -334,45 +334,43 @@ body {
   border-bottom: 1px solid var(--border-color);
 }
 
-.movie-poster {
-  width: 100%;
-  height: 100%;
-  object-fit: cover;
-  object-position: top;
+/* Genre-based gradient poster */
+.genre-poster {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 16px;
   transition: var(--transition-smooth);
 }
 
-.movie-card:hover .movie-poster {
-  transform: scale(1.05);
+.movie-card:hover .genre-poster {
+  filter: brightness(1.15);
 }
 
-.poster-placeholder {
-  width: 100%;
-  height: 100%;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  font-size: 32px;
-  color: var(--text-muted);
-  background: linear-gradient(135deg, #111827, #1f2937);
+.genre-poster-icon {
+  font-size: 56px;
+  filter: drop-shadow(0 4px 12px rgba(0, 0, 0, 0.4));
+  transition: var(--transition-smooth);
 }
 
-.poster-placeholder.loading {
-  background: #111827;
+.movie-card:hover .genre-poster-icon {
+  transform: scale(1.15);
 }
 
-.spinner-mini {
-  width: 24px;
-  height: 24px;
-  border: 2px solid rgba(255, 255, 255, 0.1);
-  border-top-color: var(--accent);
-  border-radius: 50%;
-  animation: spin 1s linear infinite;
-}
-
-@keyframes spin {
-  from { transform: rotate(0deg); }
-  to { transform: rotate(360deg); }
+.genre-poster-title {
+  font-size: 16px;
+  font-weight: 700;
+  color: rgba(255, 255, 255, 0.85);
+  text-align: center;
+  padding: 0 20px;
+  text-shadow: 0 2px 8px rgba(0, 0, 0, 0.5);
+  max-width: 100%;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
 }
 
 .movie-card-content {

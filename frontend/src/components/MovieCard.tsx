@@ -1,4 +1,4 @@
-import { useState, useEffect } from "react";
+import { useState } from "react";
 
 interface MovieCardProps {
   title: string;
@@ -6,6 +6,40 @@ interface MovieCardProps {
   overview: string;
   vote_average: number;
   popularity: number;
+}
+
+// Genre-based gradient and icon mapping
+const GENRE_STYLES: Record<string, { gradient: string; icon: string }> = {
+  action:      { gradient: "linear-gradient(135deg, #dc2626, #f97316)", icon: "💥" },
+  adventure:   { gradient: "linear-gradient(135deg, #059669, #34d399)", icon: "🧭" },
+  animation:   { gradient: "linear-gradient(135deg, #7c3aed, #c084fc)", icon: "✨" },
+  comedy:      { gradient: "linear-gradient(135deg, #eab308, #facc15)", icon: "😂" },
+  crime:       { gradient: "linear-gradient(135deg, #334155, #64748b)", icon: "🔫" },
+  documentary: { gradient: "linear-gradient(135deg, #0284c7, #38bdf8)", icon: "📹" },
+  drama:       { gradient: "linear-gradient(135deg, #6366f1, #818cf8)", icon: "🎭" },
+  family:      { gradient: "linear-gradient(135deg, #ec4899, #f9a8d4)", icon: "👨‍👩‍👧‍👦" },
+  fantasy:     { gradient: "linear-gradient(135deg, #7c3aed, #a78bfa)", icon: "🔮" },
+  history:     { gradient: "linear-gradient(135deg, #92400e, #d97706)", icon: "📜" },
+  horror:      { gradient: "linear-gradient(135deg, #1c1917, #991b1b)", icon: "👻" },
+  music:       { gradient: "linear-gradient(135deg, #db2777, #f472b6)", icon: "🎵" },
+  mystery:     { gradient: "linear-gradient(135deg, #1e293b, #475569)", icon: "🔍" },
+  romance:     { gradient: "linear-gradient(135deg, #e11d48, #fb7185)", icon: "❤️" },
+  "science fiction": { gradient: "linear-gradient(135deg, #0f172a, #6366f1)", icon: "🚀" },
+  "sci-fi":    { gradient: "linear-gradient(135deg, #0f172a, #6366f1)", icon: "🚀" },
+  thriller:    { gradient: "linear-gradient(135deg, #0f172a, #dc2626)", icon: "⚡" },
+  war:         { gradient: "linear-gradient(135deg, #422006, #78716c)", icon: "⚔️" },
+  western:     { gradient: "linear-gradient(135deg, #a16207, #ca8a04)", icon: "🤠" },
+};
+
+const DEFAULT_STYLE = { gradient: "linear-gradient(135deg, #1e293b, #334155)", icon: "🎬" };
+
+function getGenreStyle(genres: string) {
+  if (!genres) return DEFAULT_STYLE;
+  const genreList = genres.toLowerCase().split(",").map((g) => g.trim());
+  for (const genre of genreList) {
+    if (GENRE_STYLES[genre]) return GENRE_STYLES[genre];
+  }
+  return DEFAULT_STYLE;
 }
 
 function MovieCard({
@@ -16,40 +50,10 @@ function MovieCard({
   popularity,
 }: MovieCardProps) {
   const [isExpanded, setIsExpanded] = useState(false);
-  const [posterUrl, setPosterUrl] = useState<string | null>(null);
-  const [posterLoading, setPosterLoading] = useState(true);
 
   // Convert comma separated genres to list of tags
   const genreList = genres ? genres.split(",").map((g) => g.trim()) : [];
-
-  useEffect(() => {
-    let active = true;
-    const fetchPoster = async () => {
-      try {
-        const response = await fetch(`https://imdb.iamidiotareyoutoo.com/search?q=${encodeURIComponent(title)}`);
-        if (!response.ok) throw new Error("Network response was not ok");
-        const data = await response.json();
-        if (active && data.ok && data.description && data.description.length > 0) {
-          const match = data.description.find(
-            (item: any) => item["#TITLE"]?.toLowerCase() === title.toLowerCase()
-          ) || data.description[0];
-          
-          if (match && match["#IMG_POSTER"]) {
-            setPosterUrl(match["#IMG_POSTER"]);
-          }
-        }
-      } catch (err) {
-        console.error("Failed to fetch poster for:", title, err);
-      } finally {
-        if (active) setPosterLoading(false);
-      }
-    };
-
-    fetchPoster();
-    return () => {
-      active = false;
-    };
-  }, [title]);
+  const style = getGenreStyle(genres);
 
   return (
     <div 
@@ -58,16 +62,12 @@ function MovieCard({
       style={{ cursor: "pointer" }}
       title={isExpanded ? "Click to collapse" : "Click to view full description"}
     >
-      <div className="movie-poster-wrapper">
-        {posterLoading ? (
-          <div className="poster-placeholder loading">
-            <span className="spinner-mini"></span>
-          </div>
-        ) : posterUrl ? (
-          <img src={posterUrl} alt={title} className="movie-poster" loading="lazy" />
-        ) : (
-          <div className="poster-placeholder">🎬</div>
-        )}
+      <div
+        className="movie-poster-wrapper genre-poster"
+        style={{ background: style.gradient }}
+      >
+        <span className="genre-poster-icon">{style.icon}</span>
+        <span className="genre-poster-title">{title}</span>
       </div>
 
       <div className="movie-card-content">
