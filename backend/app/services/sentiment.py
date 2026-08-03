@@ -23,7 +23,7 @@ def predict_sentiment(text: str):
     probabilities = model.predict_proba(vectorized_text)[0]
     confidence = max(probabilities)
 
-    # İstersen düşük güvenli tahminleri neutral yapıyoruz.
+    # Treat low-confidence predictions as neutral
     if confidence < 0.60:
         prediction = "neutral"
 
